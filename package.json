@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "npm run build && vite",
-    "build": "npm run lint && tsc -b && vite build",
+    "build": "npm run lint && npm run type-check && vite build",
     "lint": "eslint .",
+    "type-check": "tsc -b",
     "preview": "vite preview"
   },
   "dependencies": {
