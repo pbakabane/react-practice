@@ -29,7 +29,7 @@ export const Posts = () => {
     return (
         <div style={{ padding: '20px' }}>
             <h3>Here is posts!</h3>
-            {posts.map((post: any) => (
+            {posts.map((post: Post) => (
                 <div key={post.id}>
                     <h2
                         onClick={() => handleClick(post)}
