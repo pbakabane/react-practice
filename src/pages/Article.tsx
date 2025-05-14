@@ -16,11 +16,11 @@ export const Article = () => {
             <h2>Here is article! </h2>
             {
                 articleIds.map((id) => (
-                    <><button
+                    <button
                         key={id}
                         onClick={() => handleClick(id)} style={{ marginRight: '10px' }}
                     > Article {id}
-                    </button></>
+                    </button>
                 ))}
             <Outlet />
         </div>
