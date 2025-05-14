@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router';
-import { Index } from './pages/Index';
-import { Posts } from './pages/Posts';
-import { PostDetail } from './pages/posts/PostDetail';
+import { Index } from '../pages/Index';
+import { Posts } from '../pages/Posts';
+import { PostDetail } from '../pages/posts/PostDetail';
 
-export const App: React.FC = () => {
+export const Router: React.FC = () => {
     return (
         <Routes>
             <Route path="/" element={<Index />} />

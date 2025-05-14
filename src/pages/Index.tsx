@@ -1,6 +1,6 @@
 // import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
-import { Button } from './Button';
+import { Button } from '../parts/Button';
 
 export const Index = () => {
     const navigate = useNavigate();
