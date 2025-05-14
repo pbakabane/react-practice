@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router';
-import { Post } from './Posts';
+import { Post } from '../Posts';
 
 export const PostDetail: React.FC = () => {
     const location = useLocation();
