@@ -9,7 +9,9 @@ const App: React.FC = () => {
         <><div>
             <Checkbox isChecked={isChecked} onChange={setIsChecked} />
         </div><div>
-                <Button disabled={isChecked} />
+                <Button disabled={isChecked} label={''} onClick={function (): void {
+                    throw new Error('Function not implemented.');
+                }} />
             </div></>
     );
 }
