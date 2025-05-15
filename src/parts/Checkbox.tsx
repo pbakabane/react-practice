@@ -1,20 +1,16 @@
-import React from 'react';
+import React from "react";
 
 type CheckboxProps = {
-    isChecked: boolean;
-    onChange: (checked: boolean) => void;
+  isChecked: boolean;
+  onChange: (checked: boolean) => void;
 };
 
 const Checkbox: React.FC<CheckboxProps> = ({ isChecked, onChange }) => {
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={(e) => onChange(e.target.checked)}
-            />
-        </label>
-    );
+  return (
+    <label>
+      <input type='checkbox' checked={isChecked} onChange={(e) => onChange(e.target.checked)} />
+    </label>
+  );
 };
 
 export default Checkbox;
