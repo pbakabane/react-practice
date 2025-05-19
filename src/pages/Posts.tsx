@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 export interface Post {
   id: number;
@@ -8,16 +9,17 @@ export interface Post {
 }
 
 export const Posts = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error(err));
-  }, []);
+  const { data: posts = [] } = useQuery<Post[], Error>({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      if (!res.ok) throw new Error("Failed to fetch posts");
+      return res.json();
+    }
+  });
 
   const handleClick = (post: Post) => {
     setSelectedPostId(post.id);
