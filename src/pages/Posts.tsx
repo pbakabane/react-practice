@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "../parts/Button";
 
 export interface Post {
   id: number;
@@ -16,7 +17,8 @@ export const Posts = () => {
     data: posts = [],
     error,
     isPending,
-    isFetching
+    isFetching,
+    refetch
   } = useQuery<Post[], Error>({
     queryKey: ["posts"],
     queryFn: async () => {
@@ -44,12 +46,17 @@ export const Posts = () => {
       ) : error ? (
         <div style={{ color: "red" }}>エラーです</div>
       ) : (
-        posts.map((posts: Post) => (
-          <div key={posts.id}>
-            <h2 onClick={() => handleClick(posts)}>{posts.title}</h2>
-            {selectedPostId === posts.id && <Outlet />}
+        <>
+          <div style={{ marginBottom: "10px" }}>
+            <Button label='リロード' onClick={() => refetch()} />
           </div>
-        ))
+          {posts.map((post: Post) => (
+            <div key={post.id}>
+              <h2 onClick={() => handleClick(post)}>{post.title}</h2>
+              {selectedPostId === post.id && <Outlet />}
+            </div>
+          ))}
+        </>
       )}
     </div>
   );
