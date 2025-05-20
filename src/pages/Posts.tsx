@@ -20,14 +20,13 @@ export const Posts = () => {
   } = useQuery<Post[], Error>({
     queryKey: ["posts"],
     queryFn: async () => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/err"); //https://jsonplaceholder.typicode.com/posts
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      if (!res.ok) {
+        throw new Error();
+      }
       return res.json();
     }
   });
-
-  console.log("https://jsonplaceholder.typicode.com/err"); //実行時URL
-  console.log("postsの中身:", posts);
-  console.log("errorの中身:", error);
 
   const handleClick = (posts: Post) => {
     setSelectedPostId(posts.id);
@@ -41,7 +40,7 @@ export const Posts = () => {
       <h3>Here is posts!</h3>
 
       {isFetching || isPending ? (
-        <div style={{ color: "yellow" }}>loading...</div>
+        <div style={{ color: "orange" }}>loading...</div>
       ) : error ? (
         <div style={{ color: "red" }}>エラーです</div>
       ) : (
