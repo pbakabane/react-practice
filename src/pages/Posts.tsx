@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "../parts/Button";
 
 export interface Post {
   id: number;
@@ -8,36 +10,54 @@ export interface Post {
 }
 
 export const Posts = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error(err));
-  }, []);
+  const {
+    data: posts = [],
+    error,
+    isPending,
+    isFetching,
+    refetch
+  } = useQuery<Post[], Error>({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      if (!res.ok) {
+        throw new Error();
+      }
+      return res.json();
+    }
+  });
 
-  const handleClick = (post: Post) => {
-    setSelectedPostId(post.id);
-    navigate(`/posts/${post.id}`, {
-      state: post
+  const handleClick = (posts: Post) => {
+    setSelectedPostId(posts.id);
+    navigate(`/posts/${posts.id}`, {
+      state: posts
     });
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h3>Here is posts!</h3>
-      {posts.map((post: Post) => (
-        <div key={post.id}>
-          <h2 onClick={() => handleClick(post)}>{post.title}</h2>
-          {selectedPostId === post.id && (
-            <Outlet />
-            // <p style={{ color: 'gray' }}>{post.body}</p>
-          )}
-        </div>
-      ))}
+
+      {isFetching || isPending ? (
+        <div style={{ color: "orange" }}>loading...</div>
+      ) : error ? (
+        <div style={{ color: "red" }}>エラーです</div>
+      ) : (
+        <>
+          <div style={{ marginBottom: "10px" }}>
+            <Button label='リロード' onClick={() => refetch()} />
+          </div>
+          {posts.map((post: Post) => (
+            <div key={post.id}>
+              <h2 onClick={() => handleClick(post)}>{post.title}</h2>
+              {selectedPostId === post.id && <Outlet />}
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };
