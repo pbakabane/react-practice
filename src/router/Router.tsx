@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router";
 import { Index } from "../pages/Index";
 import { Home } from "../pages/Home";
-import { Posts } from "../pages/Posts";
-import { PostDetail } from "../pages/posts/PostDetail";
+import { Posts } from "../pages/posts/components/Posts";
+import { PostDetail } from "../pages/posts/components/panes/PostDetailPane";
 import { Article } from "../pages/Article";
 import { ArticleDetail } from "../pages/article/ArticleDetail";
 
