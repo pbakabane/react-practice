@@ -1,6 +1,7 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Posts } from "../components/Posts";
 
 export interface Post {
   id: number;
@@ -8,21 +9,7 @@ export interface Post {
   body: string;
 }
 
-interface RenderProps {
-  posts: Post[];
-  isFetching: boolean;
-  isPending: boolean;
-  selectedPostId: number | null;
-  onClickPost: (post: Post) => void;
-  error: Error | null;
-  onRefetch: () => void;
-}
-
-export interface Props {
-  render: (props: RenderProps) => JSX.Element;
-}
-
-export const PostsContainer = ({ render }: Props) => {
+export const PostsContainer = () => {
   const navigate = useNavigate();
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
@@ -50,13 +37,17 @@ export const PostsContainer = ({ render }: Props) => {
     });
   };
 
-  return render({
-    posts,
-    selectedPostId,
-    isPending,
-    isFetching,
-    onClickPost: handleClickPost,
-    error: error || null,
-    onRefetch: refetch
-  });
+  const handleClickReload = () => refetch();
+
+  return (
+    <Posts
+      posts={posts}
+      isFetching={isFetching}
+      isPending={isPending}
+      selectedPostId={selectedPostId}
+      error={error}
+      onClickPost={handleClickPost}
+      onClickReload={handleClickReload}
+    />
+  );
 };
