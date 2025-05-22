@@ -5,12 +5,10 @@ type CheckboxProps = {
   onChange: (checked: boolean) => void;
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ isChecked, onChange }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({ isChecked, onChange }) => {
   return (
     <label>
       <input type='checkbox' checked={isChecked} onChange={(e) => onChange(e.target.checked)} />
     </label>
   );
 };
-
-export default Checkbox;
