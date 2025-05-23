@@ -1,6 +1,7 @@
 import { useLocation, useParams } from "react-router";
+import { ArticleDetail } from "../components/ArticleDetail";
 
-export const ArticleDetail: React.FC = () => {
+export const ArticleDetailContainer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const state = location.state as { from?: string } | null;
@@ -12,10 +13,5 @@ export const ArticleDetail: React.FC = () => {
 
   const lastSegment = isFromArticle ? (fromPath.split("/").filter(Boolean).pop() ?? "") : "";
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <p>{articleContent}</p>
-      {isFromArticle && lastSegment && <p style={{ color: "gray", fontSize: "12px" }}>from: {lastSegment}</p>}
-    </div>
-  );
+  return <ArticleDetail articleContent={articleContent} isFromArticle={isFromArticle} lastSegment={lastSegment} />;
 };
