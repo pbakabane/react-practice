@@ -75,6 +75,15 @@ $ git rebase main
 
 > ◎issue対応が完了しPRを作成する際は、「closes #<対応したissueのID>」のコメントをつける（マージされた際に当該`issue`が自動で`close`される）
 
+### ◆他ブランチの取込
+
+```bash
+$ git cherry-pick <取り込みたいコミットID>
+```
+
+◎<取り込みたいコミットID>のコミットが現在のブランチの先頭に追加される
+◎コミットIDはGitGraph上や`git log`コマンドで確認する
+
 ## コードの品質均一化に向けた拡張機能
 
 ### ◆Prettierの導入
