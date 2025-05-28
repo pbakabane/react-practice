@@ -5,9 +5,11 @@ import { FC } from "react";
 import { BrowserRouter } from "react-router";
 
 const mockedNavigate = jest.fn();
+const pathname: string = "/article";
 jest.mock("react-router", () => ({
   ...jest.requireActual("react-router"),
-  useNavigate: () => mockedNavigate
+  useNavigate: () => mockedNavigate,
+  useLocation: () => ({ pathname })
 }));
 
 const Wrapper: FC = () => (
@@ -23,19 +25,12 @@ describe("ArticleContainerのテスト", () => {
     jest.resetAllMocks();
   });
 
-  test("ボタンがすべて表示されていること", () => {
-    [1, 2, 3, 4, 5].forEach((id) => {
-      expect(screen.getByRole("button", { name: `Article ${id}` })).toBeInTheDocument();
-    });
+  test.each<number>([1, 2, 3, 4, 5])("「Article %i」ボタンが表示されていること", (id) => {
+    expect(screen.getByRole("button", { name: `Article ${id}` })).toBeInTheDocument();
   });
 
-  test("ボタンをクリックするとnavigateが呼ばれること", async () => {
-    await waitFor(async () => await userEvent.click(screen.getByRole("button", { name: "Article 2" })));
-    expect(mockedNavigate).toHaveBeenCalledWith(
-      "/article/2",
-      expect.objectContaining({
-        state: expect.objectContaining({ from: expect.any(String) })
-      })
-    );
+  test.each<number>([1, 2, 3, 4, 5])("「Article %i」ボタンを押下するとnavigateがコールされること", async (id) => {
+    await waitFor(async () => await userEvent.click(screen.getByRole("button", { name: `Article ${id}` })));
+    expect(mockedNavigate).toHaveBeenCalledWith(`/article/${id}`, { state: { from: pathname } });
   });
 });

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { ArticleDetailContentPane } from "./panes/ArticleDetailContentPane";
 
 interface ArticleDetailProps {
   articleContent: string;
@@ -8,5 +7,8 @@ interface ArticleDetailProps {
 }
 
 export const ArticleDetail: FC<ArticleDetailProps> = ({ articleContent, isFromArticle, lastSegment }) => (
-  <ArticleDetailContentPane articleContent={articleContent} isFromArticle={isFromArticle} lastSegment={lastSegment} />
+  <div style={{ padding: "20px" }}>
+    <p>{articleContent}</p>
+    {isFromArticle && lastSegment && <p style={{ color: "gray", fontSize: "12px" }}>from: {lastSegment}</p>}
+  </div>
 );

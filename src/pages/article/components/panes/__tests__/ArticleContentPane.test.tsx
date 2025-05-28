@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { ArticleContentPane } from "../ArticleContentPane";
 
 const mockedHandleClick = jest.fn();
+const articleIds: number[] = [1, 2];
 
 describe("ArticleContentPaneのテスト", () => {
   beforeEach(() => render(<ArticleContentPane articleIds={[1, 2]} handleClick={mockedHandleClick} />));
@@ -10,13 +11,12 @@ describe("ArticleContentPaneのテスト", () => {
     jest.clearAllMocks();
   });
 
-  test("各記事ボタンが表示されていること", () => {
-    expect(screen.getByRole("button", { name: "Article 1" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Article 2" })).toBeInTheDocument();
+  test.each<number>(articleIds)("「Article %i」ボタンが表示されていること", (id) => {
+    expect(screen.getByRole("button", { name: `Article ${id}` })).toBeInTheDocument();
   });
 
-  test("クリックでhandleClickが呼ばれること", async () => {
-    await waitFor(() => userEvent.click(screen.getByRole("button", { name: "Article 1" })));
-    expect(mockedHandleClick).toHaveBeenCalledWith(1);
+  test.each<number>(articleIds)("「Article %i」ボタンを押下するとhandleClickがコールされること", async (id) => {
+    await waitFor(() => userEvent.click(screen.getByRole("button", { name: `Article ${id}` })));
+    expect(mockedHandleClick).toHaveBeenCalledWith(id);
   });
 });
