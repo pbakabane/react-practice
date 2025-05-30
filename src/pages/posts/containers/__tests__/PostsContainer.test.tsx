@@ -38,24 +38,20 @@ describe("PostsContainerのテスト", () => {
     });
   });
 
-  test("ポスト一覧が表示されること", () => {
+  test.each<Post>(mockPosts)("ポスト一覧(タイトル)が表示されていること", ({ title }) => {
     render(<PostsContainer />);
-    mockPosts.forEach((post) => {
-      expect(screen.getByText(post.title)).toBeInTheDocument();
-    });
+    expect(screen.getByText(title)).toBeInTheDocument();
   });
 
-  test("投稿タイトルをクリックするとnavigateが呼ばれること", async () => {
+  test.each<Post>(mockPosts)("ポストのタイトルをクリックするとnavigateがコールされること", async (post) => {
     render(<PostsContainer />);
-    const postTitle = screen.getByText(mockPosts[0].title);
-    await userEvent.click(postTitle);
-    expect(mockNavigate).toHaveBeenCalledWith(`/posts/${mockPosts[0].id}`, { state: mockPosts[0] });
+    await waitFor(async () => await userEvent.click(screen.getByText(post.title)));
+    expect(mockNavigate).toHaveBeenCalledWith(`/posts/${post.id}`, { state: post });
   });
 
   test("リロードボタンをクリックするとrefetchが呼ばれること", async () => {
     render(<PostsContainer />);
-    const reloadButton = screen.getByRole("button", { name: /リロード/i });
-    await waitFor(async () => await userEvent.click(reloadButton));
+    await waitFor(async () => await userEvent.click(screen.getByRole("button", { name: "リロード" })));
     expect(mockRefetch).toHaveBeenCalled();
   });
 
