@@ -15,7 +15,7 @@ describe("ReloadPaneのテスト", () => {
   });
 
   test("「リロード」ボタンを押下するとonClickReloadが1回コールされること", async () => {
-    await waitFor(() => userEvent.click(screen.getByRole("button", { name: "リロード" })));
+    await waitFor(async () => await userEvent.click(screen.getByRole("button", { name: "リロード" })));
     expect(mockedOnClickReload).toHaveBeenCalledTimes(1);
   });
 });

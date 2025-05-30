@@ -55,7 +55,7 @@ describe("PostsContainerのテスト", () => {
   test("リロードボタンをクリックするとrefetchが呼ばれること", async () => {
     render(<PostsContainer />);
     const reloadButton = screen.getByRole("button", { name: /リロード/i });
-    await waitFor(() => userEvent.click(reloadButton));
+    await waitFor(async () => await userEvent.click(reloadButton));
     expect(mockRefetch).toHaveBeenCalled();
   });
 

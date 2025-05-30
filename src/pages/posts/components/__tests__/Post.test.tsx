@@ -95,7 +95,7 @@ describe("エラーでもロード中でもない通常時について", () => {
 
   test.each<Post>(mockPosts)("PostContentPaneのタイトル「%s」をクリックするとonClickPostが呼ばれる", async (post) => {
     const postTitle = screen.getByText(post.title);
-    await waitFor(() => userEvent.click(postTitle));
+    await waitFor(async () => await userEvent.click(postTitle));
     expect(mockOnClickPost).toHaveBeenCalledWith(post);
   });
 
@@ -106,7 +106,7 @@ describe("エラーでもロード中でもない通常時について", () => {
 
   test("リロードボタンをクリックするとonClickReloadが呼ばれる", async () => {
     const reloadButton = screen.getByRole("button", { name: /リロード/i });
-    await waitFor(() => userEvent.click(reloadButton));
+    await waitFor(async () => await userEvent.click(reloadButton));
     expect(mockOnClickReload).toHaveBeenCalledTimes(1);
   });
 });

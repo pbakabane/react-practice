@@ -21,7 +21,7 @@ describe("Articleのテスト", () => {
   });
 
   test.each<number>(articleIds)("「Article %i」ボタンを押下するとhandleClickがコールされること", async (id) => {
-    await waitFor(() => userEvent.click(screen.getByRole("button", { name: `Article ${id}` })));
+    await waitFor(async () => await userEvent.click(screen.getByRole("button", { name: `Article ${id}` })));
     expect(mockedHandleClick).toHaveBeenCalledWith(id);
   });
 });
