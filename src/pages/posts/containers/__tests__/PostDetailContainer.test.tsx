@@ -22,15 +22,19 @@ describe("PostDetailContainerのテスト", () => {
   });
 
   describe("location.stateにpostがある場合", () => {
+    const body: string = "本文です";
     beforeEach(() => {
       mockedUseLocation.mockReturnValue({
-        state: { id: 1, title: "タイトル", body: "本文です" }
+        state: { id: 1, title: "タイトル", body }
       });
       render(<Wrapper />);
     });
 
     test("PostDetailにbodyが渡されて表示されていること", () => {
-      expect(screen.getByText("本文です")).toBeInTheDocument();
+      expect(screen.getByText(body)).toBeInTheDocument();
+    });
+    test("LoadingPaneが表示されていないこと", () => {
+      expect(screen.queryByText("loading...")).not.toBeInTheDocument();
     });
   });
 

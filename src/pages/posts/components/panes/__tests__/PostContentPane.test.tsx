@@ -8,26 +8,30 @@ jest.mock("react-router", () => ({
 }));
 
 const mockedOnClickPost = jest.fn();
-const mockPost = { id: 1, title: "テストタイトル", body: "テスト本文" };
+const currentPostId: number = 1;
+const mockPost = { id: currentPostId, title: "テストタイトル", body: "テスト本文" };
 
 describe("PostContentPaneのテスト", () => {
-  beforeEach(() => render(<PostContentPane post={mockPost} selectedPostId={null} onClickPost={mockedOnClickPost} />));
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test("postのタイトルが表示されていること", () => {
-    expect(screen.getByText(mockPost.title)).toBeInTheDocument();
-  });
+  describe("タイトルの表示と押下時の処理について", () => {
+    beforeEach(() => render(<PostContentPane post={mockPost} selectedPostId={null} onClickPost={mockedOnClickPost} />));
 
-  test("タイトルクリックでonClickPostが呼ばれること", async () => {
-    await waitFor(async () => await userEvent.click(screen.getByText(mockPost.title)));
-    expect(mockedOnClickPost).toHaveBeenCalledWith(mockPost);
+    test("postのタイトルが表示されていること", () => {
+      expect(screen.getByText(mockPost.title)).toBeInTheDocument();
+    });
+
+    test("タイトルクリックでonClickPostが呼ばれること", async () => {
+      await waitFor(async () => await userEvent.click(screen.getByText(mockPost.title)));
+      expect(mockedOnClickPost).toHaveBeenCalledWith(mockPost);
+    });
   });
 
   describe("PostContentPaneのテスト", () => {
     test("selectedPostIdがpost.idと等しい場合にOutletが表示されること", () => {
-      render(<PostContentPane post={mockPost} selectedPostId={1} onClickPost={mockedOnClickPost} />);
+      render(<PostContentPane post={mockPost} selectedPostId={currentPostId} onClickPost={mockedOnClickPost} />);
       expect(screen.getByTestId("outlet")).toBeInTheDocument();
     });
 
