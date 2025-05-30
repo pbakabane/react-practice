@@ -21,7 +21,7 @@ describe("PostContentPaneのテスト", () => {
   });
 
   test("タイトルクリックでonClickPostが呼ばれること", async () => {
-    await waitFor(() => userEvent.click(screen.getByText(mockPost.title)));
+    await waitFor(async () => await userEvent.click(screen.getByText(mockPost.title)));
     expect(mockedOnClickPost).toHaveBeenCalledWith(mockPost);
   });
 
