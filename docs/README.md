@@ -109,3 +109,74 @@ SPAのアプリケーションを実行する際は、`HTML/JS`ファイルを�
 ```bash
 npm install @tanstack/react-query
 ```
+
+> ◎`queryFn`の定義内でエラーをthrowする（しないとerrorがnull以外の値にならない）
+
+> ◎開発者ツールのnetworkタブにて、通信の様子（statusコードなど）を確認することができる
+
+> ◎現場ではAPIごとのIF仕様書に基づき、リクエスト/レスポンスの型定義を行う
+
+### ディレクトリ構成について
+
+> ◎`/pages`ディレクトリ直下に各ページのディレクトリを置く。
+
+> ◎各ページのディレクトリ構成\
+>  例：/posts関連のファイル\
+>  └pages\
+>  　└posts\
+>  　　└components　◎大きい部品と、その中に含まれる小さい部品全て\
+>  　　　└Posts.tsx（Posts全体のコンポーネント）\
+>  　　　└PostDetail.tsx（PostDetail全体のコンポーネント）\  
+>  　　　└panes　◎小さい部品たち（一部省略）\
+>  　　　　└PostBodyPane.tsx (カラーやフォントなど、スタイルを記載する部分)\
+>  　　　　└PostDetailPane.tsx (「/posts/:id」で表示される部分)\
+>  　　　　└LoadingPane.tsx (loading状態で表示される部分)\
+>  　　　　└ErrorPane.tsx (エラー状態で表示される部分)\
+>  　　└containers ◎コンテナたち（部品に渡す色々な定義をしている）\
+>  　　　└PostsContainer.tsx（Postsのコンテナ）\
+>  　　　└PostsDetailContainer.tsx（PostDetailのコンテナ）
+
+- それぞれの役割詳細
+
+1.  /containers直下(例：PostsContainer.tsx,PostsDetailContainer.tsx)
+
+    > ◎router/Router.tsxで使用。stateやロジックを定義
+
+2.  /components直下(例：Posts.tsx,PostDetail.tsx)
+
+    > ◎対応するcontainerで表示し、propsでstateや変数、ロジックを受け取る\
+    > ◎ここではstateやロジックを定義せず、あくまでも受け取るのみ。そして、さらに③にstateやロジックを受け渡す
+
+3.  /components/panes直下(例：LoadingPane.tsx,PostBodyPane.tsx)
+    > ◎②の個々の表示部分を定義\
+    > ◎①→②と渡ってきたstateやロジックを用いる
+
+### ◆単体テストの実装
+
+- テストファイルについて
+
+  > ◎テスト対象ファイルがあるディレクトリに、`__tests__`ディレクトリを作成する\
+  > ◎`__tests__`ディレクトリ内に`<対象ファイル名>.test.tsx`を作成する
+
+- テストファイル基本(例)
+
+  ```bash
+  // Greeting.tsx(テスト対象：動作部分のみ)
+  export const Greeting: React.FC<GreetingProps> = ({ name }) => {
+  return <h1>Hello, {name}!</h1>;
+  };
+
+  //Greeting.test.tsx(テストファイル：構文部分のみ)
+  describe("Greetingのテスト", () => {  //describeは入れ子にもできる（分岐がある場合など）
+  test("Hello, Taro!が表示されること", () => {
+    render(<Greeting name="Taro" />);
+    expect(screen.getByText("Hello, Taro!")).toBeInTheDocument();
+  });
+  });
+  ```
+
+> ◎原則
+>
+> - `test`の説明 (第一引数) は、「~であること」のように期待値の内容を記述する
+> - `test`のコールバック (第二引数) 内の`expect`は1つ ⇒1ケースあたり1つの期待値
+> - モックの返り値指定や`render`関数の実行など、同じ処理を複数テストケースで実行する場合は、`describe`配下に複数`test`をまとめ、`beforeEach`を用いる
